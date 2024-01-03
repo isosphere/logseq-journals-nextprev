@@ -40,7 +40,7 @@ function main () {
 
   // external btns
   logseq.App.registerUIItem('toolbar', {
-    key: 'next-day', template: `
+    key: 'open-d-next-day', template: `
       <a class="button" id="next-day-button" data-on-click="nextDay" data-rect>
         <i class="ti ti-square-arrow-right"></i> 
       </a>
@@ -48,7 +48,7 @@ function main () {
   })
 
   logseq.App.registerUIItem('toolbar', {
-    key: 'prev-day', template: `
+    key: 'open-a-next-day', template: `
       <a class="button" id="prev-day-button" data-on-click="prevDay" data-rect>
         <i class="ti ti-square-arrow-left"></i> 
       </a>
