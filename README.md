@@ -5,7 +5,7 @@ Dates that do not already have a journal page are skipped, by design.
 
 ### Demo
 
-![demo](./demo.webm)
+![demo](./demo.gif)
 
 ### Licence
 
