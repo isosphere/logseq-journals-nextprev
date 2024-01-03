@@ -18,7 +18,6 @@ function svg () {
 export default {
   base: './',
   optimizeDeps: {
-    exclude: ['dayjs'],
   },
   build: {
     target: 'esnext',

@@ -2,101 +2,30 @@ import '@logseq/libs'
 import { createApp } from 'vue'
 import App from './App.vue'
 import './index.css'
-import 'v-calendar/dist/style.css'
-import VCalendar from 'v-calendar'
-
-import customParseFormat from 'dayjs/esm/plugin/customParseFormat'
-import advancedFormat from 'dayjs/esm/plugin/advancedFormat'
-import isToday from 'dayjs/esm/plugin/isToday'
-import dayjs from 'dayjs/esm/index'
-
-dayjs.extend(customParseFormat)
-dayjs.extend(advancedFormat)
-dayjs.extend(isToday)
 
 /** settings **/
-const settingsSchema = [
-  {
-    key: 'showTodayBtn',
-    type: 'boolean',
-    title: 'Do you like today button?',
-    description: 'Do you want to show Today button from toolbar? (reload needed)',
-    default: true,
-  }, {
-    key: 'firstDayOfWeek',
-    type: 'number',
-    title: 'The first day of week',
-    description: 'Day number for the first day of the week (1: Sun - 7: Sat). Ignore setting this prop if you want to allow the locale to determine this setting.',
-    default: 1,
-  }, {
-    key: 'backgroundColorOfContainerLight',
-    type: 'string',
-    title: 'The background color of calendar container (light mode)',
-    description: '🌝 color of light mode!',
-    default: '#ffffff',
-    inputAs: 'color',
-  }, {
-    key: 'backgroundColorOfContainerDark',
-    type: 'string',
-    title: 'The background color of calendar container (dark mode)',
-    description: '🌚 color of dark mode!',
-    default: '#000000',
-    inputAs: 'color',
-  }, {
-    key: 'hotkey',
-    type: 'string',
-    title: 'Hotkey to open calendar',
-    description: 'Hotkey to open calendar',
-    default: null,
-  }, {
-    key: 'keepOpenOnSelect',
-    type: 'boolean',
-    title: '',
-    description: 'Keep the calendar open after selecting a date',
-    default: false,
-  }, {
-    key: 'showWeekNumbers',
-    type: 'boolean',
-    title: '',
-    description: 'Show week numbers in calendar',
-    default: false,
-  },{
-    key: 'showIsoWeeknumbers',
-    type: 'boolean',
-    title: '',
-    description: 'Show week number in ISO format',
-    default: false,
-  }]
-
 let app = null
 
 /**
  * user model
  */
 const model = {
-  openCalendar (e) {
-    const { rect } = e
-    const inner = document.querySelector('.calendar-inner')
-
-    Object.assign(inner.style, {
-      top: `${rect.top + 30}px`, left: `${rect.left - 115}px`,
-    })
-
-    logseq.showMainUI()
+  goToDayOfJournal (name) {
+    app._onDaySelect({event: {}, name: name})
   },
 
-  goToDayOfJournal (date) {
-    if (typeof date !== 'string') {
-      date = dayjs(date).format('YYYY-MM-DD')
+  async prevDay () {
+    let prior_date = await app._prevDay()
+    if (prior_date) {
+      this.goToDayOfJournal(prior_date)
     }
-
-    app?._refreshUserConfigs().then(() => {
-      app._onDaySelect({ event: {}, id: date })
-    })
   },
 
-  goToToday () {
-    model.goToDayOfJournal(Date.now())
+  async nextDay () {
+    let next_date = await app._nextDay()
+    if (next_date) {
+      this.goToDayOfJournal(next_date)
+    }
   },
 }
 
@@ -107,58 +36,29 @@ function main () {
   logseq.setMainUIInlineStyle({
     position: 'fixed', zIndex: 11,
   })
-
-  const key = logseq.baseInfo.id
-
   logseq.provideModel(model)
-  logseq.provideStyle(`
-    div[data-injected-ui=open-calendar-${key}] {
-      display: flex;
-      align-items: center;
-      font-weight: 500;
-      position: relative;
-    }
-  `)
 
   // external btns
   logseq.App.registerUIItem('toolbar', {
-    key: 'open-calendar', template: `
-      <a class="button" id="open-calendar-button"
-      data-on-click="openCalendar"
-      data-rect>
-       <i class="ti ti-calendar-event"></i> 
+    key: 'next-day', template: `
+      <a class="button" id="next-day-button" data-on-click="nextDay" data-rect>
+        <i class="ti ti-square-arrow-right"></i> 
       </a>
     `,
   })
 
-  if (logseq.settings.hotkey) {
-    logseq.App.registerCommandShortcut({
-      binding: logseq.settings.hotkey,
-    }, async () => {
-      if (logseq.isMainUIVisible) {
-        return logseq.hideMainUI()
-      }
-
-      const rect = await logseq.App.queryElementRect('#open-calendar-button')
-      model.openCalendar({ rect })
-    })
-  }
-
-  if (logseq.settings.showTodayBtn) {
-    logseq.App.registerUIItem('toolbar', {
-      key: 'goto-today', template: `
-      <a 
-      class="button" title="Today's journal" 
-      data-on-click="goToToday">
-        <i class="ti ti-edit-circle"></i>
+  logseq.App.registerUIItem('toolbar', {
+    key: 'prev-day', template: `
+      <a class="button" id="prev-day-button" data-on-click="prevDay" data-rect>
+        <i class="ti ti-square-arrow-left"></i> 
       </a>
     `,
-    })
-  }
+  })
+
 
   // main UI
-  app = createApp(App).use(VCalendar, {}).mount('#app')
+  app = createApp(App).mount('#app')
 }
 
 // bootstrap
-logseq.useSettingsSchema(settingsSchema).ready(main).catch(null)
+logseq.ready(main).catch(null)
