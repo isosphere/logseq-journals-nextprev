@@ -55,6 +55,12 @@ function main () {
     `,
   })
 
+  logseq.provideStyle(`
+    body[data-page="page"] div#left-container:not(:has(div#main-content-container div.page.is-journals)) div#head :is(a#next-day-button,a#prev-day-button){
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    `)
 
   // main UI
   app = createApp(App).mount('#app')
