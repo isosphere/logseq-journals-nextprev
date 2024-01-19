@@ -63,10 +63,14 @@
         let pageEntity = await logseq.Editor.getCurrentPage()
         let journalDay = pageEntity?.journalDay
         
-        if (!journalDay) {
-          console.error('Not a journal page')
-          return
-        }
+        if (journalDay === "undefined" || pageEntity === null) {
+          // Set currentJournalDate to the current date expressed as a "YYYYMMDD" string
+          let currentDate = new Date()
+          let year = currentDate.getFullYear()
+          let month = String(currentDate.getMonth() + 1).padStart(2, '0')
+          let day = String(currentDate.getDate()).padStart(2, '0')
+          journalDay = `${year}${month}${day}`
+        } 
 
         return journalDay;
       },
@@ -75,14 +79,14 @@
         let currentJournalDate = await this._getCurrentJournalDate()
 
         if (typeof currentJournalDate === 'undefined') {
-          return
+          return;
         }
-
+      
         let journals = await this._getOlderJournals(currentJournalDate)
         let prev_day = Math.max(...Object.keys(journals).map(Number))
 
         if (!journals[prev_day]) {
-          return
+          return;
         }
 
         return journals[prev_day]['name']
@@ -90,18 +94,19 @@
 
       async _nextDay() {
         let currentJournalDate = await this._getCurrentJournalDate()
+
         if (typeof currentJournalDate === 'undefined') {
-          return
+          return;
         }
 
         let journals = await this._getNewerJournals(currentJournalDate)
         let next_day = Math.min(...Object.keys(journals).map(Number))
 
         if (!journals[next_day]) {
-          return
+          return;
         }
 
-        return journals[next_day]['name']
+        return journals[next_day]['name'];
       }
     },
   }
