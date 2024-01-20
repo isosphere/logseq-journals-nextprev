@@ -9,12 +9,7 @@
     },
 
     mounted () {
-      this._updateJournalCache()
-      logseq.App.onCurrentGraphChanged(() => { console.log("Graph change detected, updating cache."); this._updateJournalCache() })
-      // update the cache only when we have reason to do so
-      // FIXME: not triggering
-      logseq.App.onTodayJournalCreated(() => { console.log("New journal creation detected, updating cache."); this._updateJournalCache()})
-      //logseq.App.onTodayJournalDeleted(() => {this._updateJournalCache()}) does not exist AFAIK
+      this._updateJournalCache() //first run
     },
     
     methods: {
