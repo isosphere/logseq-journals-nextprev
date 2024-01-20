@@ -61,7 +61,7 @@ function main () {
       cursor: not-allowed;
     }
     `)
-
+  
   // main UI
   app = createApp(App).mount('#app')
 }

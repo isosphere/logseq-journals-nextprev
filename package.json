@@ -9,7 +9,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@logseq/libs": "0.0.15",
+    "@logseq/libs": "0.0.17",
     "vue": "3.2.45"
   },
   "devDependencies": {
