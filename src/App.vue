@@ -4,7 +4,7 @@
     
     methods: {
       async _onDaySelect ({ event, name }) {
-        console.log("onDaySelect: " + name)
+        console.debug("onDaySelect: " + name)
         if (event.shiftKey) {
           logseq.Editor.openInRightSidebar(name)
         } else {
@@ -25,7 +25,7 @@
 
         try {
           ret = await logseq.DB.datascriptQuery(`
-            [:find (pull ?p [*])
+            [:find (pull ?p [:block/journal-day :block/name])
             :where
             [?b :block/page ?p]
             [?p :block/journal? true]
@@ -44,7 +44,7 @@
 
         try {
           ret = await logseq.DB.datascriptQuery(`
-            [:find (pull ?p [*])
+            [:find (pull ?p [:block/journal-day :block/name])
             :where
             [?b :block/page ?p]
             [?p :block/journal? true]
@@ -53,7 +53,7 @@
           `)
         } catch (e) {
           console.error(e)
-        }        
+        }
 
         return this._cleanJournalQueryReturn(ret)
       },

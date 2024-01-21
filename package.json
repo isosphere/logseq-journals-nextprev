@@ -1,7 +1,7 @@
 {
   "name": "logseq-journals-nextprev",
   "description": "Provides buttons to jump to the next or previous journal entry",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "main": "dist/index.html",
   "author": "Matthew Scheffel",
   "scripts": {
