@@ -1,6 +1,13 @@
 <script>
   export default {
     name: 'App',
+
+    data () {
+      return {
+        average_time: null,
+        average_time_samples: null,
+      }
+    },
     
     methods: {
       async _onDaySelect ({ event, name }) {
@@ -42,6 +49,8 @@
       async _getOlderJournals(currentJournalDate) {
         let ret
 
+        let start_time = Date.now();
+
         try {
           ret = await logseq.DB.datascriptQuery(`
             [:find (pull ?p [*])
@@ -51,6 +60,18 @@
             [?p :block/journal-day ?d]
             [(< ?d ${currentJournalDate})]]
           `)
+
+          let end_time = Date.now();
+
+          if (this.average_time === null) {
+            this.average_time = end_time - start_time;
+            this.average_time_samples = 1;
+          } else {
+            this.average_time = (this.average_time * this.average_time_samples + (end_time - start_time)) / (this.average_time_samples + 1);
+            this.average_time_samples += 1;
+          }
+
+          console.log("Average time: " + this.average_time + "ms" + " (" + this.average_time_samples + " samples)");
         } catch (e) {
           console.error(e)
         }        
