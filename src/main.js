@@ -14,14 +14,14 @@ const model = {
     app._onDaySelect({event: {}, name: name})
   },
 
-  async prevDay () {
+  async prevDay (_context) {
     let prior_date = await app._prevDay()
     if (prior_date) {
       this.goToDayOfJournal(prior_date)
     }
   },
 
-  async nextDay () {
+  async nextDay (_context) {
     let next_date = await app._nextDay()
     if (next_date) {
       this.goToDayOfJournal(next_date)
