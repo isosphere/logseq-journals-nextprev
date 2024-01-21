@@ -53,7 +53,7 @@
 
         try {
           ret = await logseq.DB.datascriptQuery(`
-            [:find (pull ?p [*])
+            [:find (pull ?p [:block/journal-day])
             :where
             [?b :block/page ?p]
             [?p :block/journal? true]
