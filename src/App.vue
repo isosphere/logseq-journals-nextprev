@@ -1,11 +1,33 @@
 <script>
   export default {
     name: 'App',
+
+    data () {
+      return {
+        shift_held: false,
+      }
+    },
+
+    // FIXME: these events do not fire
+    mounted () {
+      document.addEventListener('keydown', this._updateShift)
+      document.addEventListener('keyup', this._updateShift)
+    },
+
+    beforeUnmount () {
+      document.removeEventListener('keydown', this._updateShift)
+      document.removeEventListener('keyup', this._updateShift)
+    },
     
     methods: {
+      _updateShift (e) {
+        this.shift_held = e.shiftKey
+        console.log("shift_held: " + this.shift_held)
+      },
+
       async _onDaySelect ({ event, name }) {
         console.debug("onDaySelect: " + name)
-        if (event.shiftKey) {
+        if (event.shiftKey || this.shift_held) {
           logseq.Editor.openInRightSidebar(name)
         } else {
           logseq.App.pushState('page', { name: name })
