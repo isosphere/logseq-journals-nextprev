@@ -60,7 +60,7 @@ function main () {
       opacity: 0.3;
       cursor: not-allowed;
     }
-    `)
+  `)
 
   // main UI
   app = createApp(App).mount('#app')

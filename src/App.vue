@@ -10,13 +10,29 @@
 
     // FIXME: these events do not fire
     mounted () {
-      document.addEventListener('keydown', this._updateShift)
-      document.addEventListener('keyup', this._updateShift)
+      // keyboard shortcuts
+      let previous_day_button = document.getElementById('prev-day-button')
+      let next_day_button = document.getElementById('next-day-button')
+
+      console.log(document)
+
+      console.log("previous_day_button: " + previous_day_button)
+      console.log("next_day_button: " + next_day_button)
+
+      previous_day_button.addEventListener('keydown', this._updateShift)
+      previous_day_button.addEventListener('keyup', this._updateShift)
+      next_day_button.addEventListener('keydown', this._updateShift)
+      next_day_button.addEventListener('keyup', this._updateShift)      
     },
 
     beforeUnmount () {
-      document.removeEventListener('keydown', this._updateShift)
-      document.removeEventListener('keyup', this._updateShift)
+      let previous_day_button = document.getElementById('prev-day-button')
+      let next_day_button = document.getElementById('next-day-button')
+      
+      previous_day_button.removeEventListener('keydown', this._updateShift)
+      previous_day_button.removeEventListener('keyup', this._updateShift)
+      next_day_button.removeEventListener('keydown', this._updateShift)
+      next_day_button.removeEventListener('keyup', this._updateShift)      
     },
     
     methods: {
