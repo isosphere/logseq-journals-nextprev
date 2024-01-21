@@ -6,6 +6,9 @@ import './index.css'
 /** settings **/
 let app = null
 
+// for duplicate hook
+let processing = false
+
 /**
  * user model
  */
@@ -55,6 +58,7 @@ function main () {
     `,
   })
 
+  // fade buttons when not available (CSS)
   logseq.provideStyle(`
     body[data-page="page"] div#left-container:not(:has(div#main-content-container div.page.is-journals)) div#head :is(a#next-day-button,a#prev-day-button){
       opacity: 0.3;
@@ -62,6 +66,34 @@ function main () {
     }
     `)
   
+  // hook
+
+  // ** FIXME: Requires page creation hook (Check if it is a journal) **
+  
+
+  // update the cache only when we have reason to do so
+  
+  logseq.App.onCurrentGraphChanged(() => { // *** graph change only ***
+    if (processing) return
+    processing = true
+
+    console.log("Graph change detected, updating cache.")
+    app._updateJournalCache()
+
+    setTimeout(() => processing = false, 1000);
+  })
+
+  logseq.App.onTodayJournalCreated(() => { // *** CAUTION: today journal only ***
+    if (processing) return
+    processing = true
+
+    console.log("New journal creation detected, updating cache.")
+    app._updateJournalCache()
+
+    setTimeout(() => processing = false, 1000);
+  })
+  //does not exist AFAIK
+
   // main UI
   app = createApp(App).mount('#app')
 }
