@@ -27,8 +27,14 @@
     
     methods: {
       _hookShiftButton () {
-        console.log("Clearing timer and hooking UI elements.")
-        
+        if (parent.document.getElementById('prev-day-button') === null) {
+          console.log("Couldn't find toolbar buttons, trying again in 1 second.")
+          this.hook_timer = setTimeout(this._hookShiftButton, 1000)
+          return
+        }
+
+        console.log("Toolbar items found, clearing timer and hooking UI elements.")
+
         clearInterval(this.hook_timer)
         // keyboard shortcuts
         let previous_day_button = parent.document.getElementById('prev-day-button')
