@@ -12,7 +12,7 @@
     // FIXME: these events do not fire
     mounted () {
       // We won't be able to find our toolbar buttons while `mounted() {}` is still executing, so we'll defer this
-      this.hook_timer = setTimeout(this._hookShiftButton, 1000)     
+      this.hook_timer = setTimeout(this._hookShiftButton, 250)     
     },
 
     beforeUnmount () {
@@ -34,14 +34,11 @@
         }
 
         console.log("Toolbar items found, clearing timer and hooking UI elements.")
-
         clearInterval(this.hook_timer)
+
         // keyboard shortcuts
         let previous_day_button = parent.document.getElementById('prev-day-button')
         let next_day_button = parent.document.getElementById('next-day-button')
-
-        console.log("previous_day_button: " + previous_day_button)
-        console.log("next_day_button: " + next_day_button)
 
         previous_day_button.addEventListener('keydown', this._updateShift)
         previous_day_button.addEventListener('keyup', this._updateShift)
@@ -50,13 +47,12 @@
       },
       _updateShift (e) {
         this.shift_held = e.shiftKey
-        console.log("shift_held: " + this.shift_held)
       },
 
-      async _onDaySelect ({ event, name }) {
+      async _onDaySelect ({ event, name, uuid }) {
         console.debug("onDaySelect: " + name)
         if (event.shiftKey || this.shift_held) {
-          logseq.Editor.openInRightSidebar(name)
+          logseq.Editor.openInRightSidebar(uuid)
         } else {
           logseq.App.pushState('page', { name: name })
         }
@@ -75,7 +71,7 @@
 
         try {
           ret = await logseq.DB.datascriptQuery(`
-            [:find (pull ?p [:block/journal-day :block/name])
+            [:find (pull ?p [:block/journal-day :block/name :block/uuid])
             :where
             [?b :block/page ?p]
             [?p :block/journal? true]
@@ -94,7 +90,7 @@
 
         try {
           ret = await logseq.DB.datascriptQuery(`
-            [:find (pull ?p [:block/journal-day :block/name])
+            [:find (pull ?p [:block/journal-day :block/name :block/uuid])
             :where
             [?b :block/page ?p]
             [?p :block/journal? true]
@@ -139,7 +135,7 @@
           return;
         }
 
-        return journals[prev_day]['name']
+        return journals[prev_day]
       },
 
       async _nextDay() {
@@ -156,7 +152,7 @@
           return;
         }
 
-        return journals[next_day]['name'];
+        return journals[next_day]
       }
     },
   }

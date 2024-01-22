@@ -10,21 +10,21 @@ let app = null
  * user model
  */
 const model = {
-  goToDayOfJournal (name) {
-    app._onDaySelect({event: {}, name: name})
+  goToDayOfJournal (journal_instance) {
+    app._onDaySelect({event: {}, name: journal_instance['name'], uuid: journal_instance['uuid']})
   },
 
   async prevDay (_context) {
-    let prior_date = await app._prevDay()
-    if (prior_date) {
-      this.goToDayOfJournal(prior_date)
+    let prior_journal = await app._prevDay()
+    if (prior_journal) {
+      this.goToDayOfJournal(prior_journal)
     }
   },
 
   async nextDay (_context) {
-    let next_date = await app._nextDay()
-    if (next_date) {
-      this.goToDayOfJournal(next_date)
+    let next_journal = await app._nextDay()
+    if (next_journal) {
+      this.goToDayOfJournal(next_journal)
     }
   },
 }
