@@ -5,22 +5,14 @@
     data () {
       return {
         shift_held: false,
+        hook_timer: null,
       }
     },
 
     // FIXME: these events do not fire
     mounted () {
-      // keyboard shortcuts
-      let previous_day_button = parent.document.getElementById('prev-day-button')
-      let next_day_button = parent.document.getElementById('next-day-button')
-
-      console.log("previous_day_button: " + previous_day_button)
-      console.log("next_day_button: " + next_day_button)
-
-      previous_day_button.addEventListener('keydown', this._updateShift)
-      previous_day_button.addEventListener('keyup', this._updateShift)
-      next_day_button.addEventListener('keydown', this._updateShift)
-      next_day_button.addEventListener('keyup', this._updateShift)      
+      // We won't be able to find our toolbar buttons while `mounted() {}` is still executing, so we'll defer this
+      this.hook_timer = setTimeout(this._hookShiftButton, 1000)     
     },
 
     beforeUnmount () {
@@ -34,6 +26,22 @@
     },
     
     methods: {
+      _hookShiftButton () {
+        console.log("Clearing timer and hooking UI elements.")
+        
+        clearInterval(this.hook_timer)
+        // keyboard shortcuts
+        let previous_day_button = parent.document.getElementById('prev-day-button')
+        let next_day_button = parent.document.getElementById('next-day-button')
+
+        console.log("previous_day_button: " + previous_day_button)
+        console.log("next_day_button: " + next_day_button)
+
+        previous_day_button.addEventListener('keydown', this._updateShift)
+        previous_day_button.addEventListener('keyup', this._updateShift)
+        next_day_button.addEventListener('keydown', this._updateShift)
+        next_day_button.addEventListener('keyup', this._updateShift)         
+      },
       _updateShift (e) {
         this.shift_held = e.shiftKey
         console.log("shift_held: " + this.shift_held)
