@@ -10,14 +10,14 @@ const settingsSchema = [
     type: 'string',
     title: 'Shortcut: Next Journal',
     description: 'A hotkey to go to the next journal that exists, chronologically.',
-    default: "ctrl+right",
+    default: "alt+right",
   },
   {
     key: 'hotkey_prev',
     type: 'string',
     title: 'Shortcut: Previous Journal',
     description: 'A hotkey to go to the previous journal that exists, chronologically.',
-    default: "ctrl+left",
+    default: "alt+left",
   },  
 ]
 
