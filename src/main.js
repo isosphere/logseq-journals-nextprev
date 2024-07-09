@@ -4,6 +4,23 @@ import App from './App.vue'
 import './index.css'
 
 /** settings **/
+const settingsSchema = [
+  {
+    key: 'hotkey_next',
+    type: 'string',
+    title: 'Shortcut: Next Journal',
+    description: 'A hotkey to go to the next journal that exists, chronologically.',
+    default: null,
+  },
+  {
+    key: 'hotkey_prev',
+    type: 'string',
+    title: 'Shortcut: Previous Journal',
+    description: 'A hotkey to go to the previous journal that exists, chronologically.',
+    default: null,
+  },  
+]
+
 let app = null
 
 /**
@@ -67,4 +84,4 @@ function main () {
 }
 
 // bootstrap
-logseq.ready(main).catch(null)
+logseq.useSettingsSchema(settingsSchema).ready(main).catch(null)
