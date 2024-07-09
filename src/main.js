@@ -10,14 +10,14 @@ const settingsSchema = [
     type: 'string',
     title: 'Shortcut: Next Journal',
     description: 'A hotkey to go to the next journal that exists, chronologically.',
-    default: null,
+    default: "ctrl+right",
   },
   {
     key: 'hotkey_prev',
     type: 'string',
     title: 'Shortcut: Previous Journal',
     description: 'A hotkey to go to the previous journal that exists, chronologically.',
-    default: null,
+    default: "ctrl+left",
   },  
 ]
 
@@ -78,6 +78,20 @@ function main () {
       cursor: not-allowed;
     }
   `)
+
+  if (logseq.settings.hotkey_next) {
+    logseq.App.registerCommandShortcut({
+      binding: logseq.settings.hotkey_next,
+      }, () => { model.nextDay(null) }
+    )
+  }
+
+  if (logseq.settings.hotkey_prev) {
+    logseq.App.registerCommandShortcut({
+      binding: logseq.settings.hotkey_prev,
+      }, () => { model.prevDay(null) }
+    )
+  }
 
   // main UI
   app = createApp(App).mount('#app')
