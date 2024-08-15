@@ -18,7 +18,9 @@ Once the plugin is installed, you will have to manually enable the toolbar butto
 1. Press the puzzle piece icon on the Logseq toolbar, near the top right of an open Logseq window
 2. Find and "pin" "open-a-next-day" and "open-d-next-day" to enable them in your toolbar.
 
-The naming of the toolbar buttons was designed to put them on either side of the "open-calendar" button from the [Journals calendar plugin by xyhp915](https://github.com/xyhp915/logseq-journals-calendar). Toolbar buttons are arranged alphabetically. 
+The naming of the toolbar buttons was designed to put them on either side of the "open-calendar" button from the [Journals calendar plugin by xyhp915](https://github.com/xyhp915/logseq-journals-calendar)[^1].
+
+[^1]: In Logseq, toolbar buttons are arranged alphabetically. 
 
 ### Demo
 
